@@ -15,7 +15,7 @@ func CreateUrlMappings() {
 	// v1 of the API
 	task := Router.Group("/task")
 	{
-		task.GET("/fetch_all", controllers.GetAllTask)
+		task.GET("/fetch", controllers.GetAllTask)
 
 		task.GET("/users/:id", controllers.GetUserDetail)
 		task.GET("/users/", controllers.GetUser)

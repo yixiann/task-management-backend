@@ -10,6 +10,7 @@ func main() {
 	mappings.CreateUrlMappings()
 	// Listen and server on 0.0.0.0:8080
 	mappings.Router.Run("localhost:8080")
+	// mappings.Router.Run("https://stark-garden-74903.herokuapp.com")
 }
 
 // package main
