@@ -49,18 +49,20 @@ func CreateTag(c *gin.Context) {
 func EditTag(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var tag models.Tag
+	c.Bind(&tag)
 
 	if tag.TagName != "" || tag.Colour != "" {
 		if update, err := dbmap.Update(&tag, "UPDATE tags SET tag_name=?, colour=? WHERE id=?",
 			tag.TagName, tag.Colour, id); update != -1 {
 			if err == nil {
 				content := &models.Tag{
+					Id:      tag.Id,
 					TagName: tag.TagName,
 					Colour:  tag.Colour,
 				}
 				c.JSON(201, content)
 			} else {
-				checkErr(err, "Insert failed")
+				checkErr(err, "Edit failed")
 			}
 		}
 	} else {
