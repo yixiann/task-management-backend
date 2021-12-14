@@ -43,7 +43,7 @@ func CreateTask(c *gin.Context) {
 	// INSERT INTO `tags` (`id`, `tag_name`, `colour`) VALUES ('3', 'Sleep', 'cyan');
 
 	if task.TaskName != "" {
-		if insert, _ := dbmap.Exec(`INSERT INTO tags (
+		if insert, _ := dbmap.Exec(`INSERT INTO tasks (
 			user_id,
 			task_name,
 			details,
