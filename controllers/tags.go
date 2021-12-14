@@ -27,8 +27,8 @@ func CreateTag(c *gin.Context) {
 	c.Bind(&tag)
 	log.Println(tag)
 	if tag.TagName != "" || tag.Colour != "" {
-		if insert, _ := dbmap.Exec(`INSERT INTO tags (Id, TagName, TagColour) VALUES (?, ?, ?)`,
-			tag.Id, tag.TagName, tag.Colour); insert != nil {
+		if insert, _ := dbmap.Exec(`INSERT INTO tags (TagName, Colour) VALUES (?, ?)`,
+			tag.TagName, tag.Colour); insert != nil {
 			tag_id, err := insert.LastInsertId()
 			if err == nil {
 				content := &models.Tag{
