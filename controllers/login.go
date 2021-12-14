@@ -23,6 +23,32 @@ func GetAllTask(c *gin.Context) {
 	}
 }
 
+func GetAllTag(c *gin.Context) {
+	var tag []models.Tag
+	_, err := dbmap.Select(&tag, "SELECT * FROM tags")
+
+	if err == nil {
+		c.JSON(200, tag)
+	} else {
+		fmt.Println(err)
+		c.JSON(404, gin.H{"error": "tags not found"})
+	}
+}
+
+func GetOneTask(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var task models.Task
+	err := dbmap.SelectOne(&task, "SELECT * FROM tasks WHERE id=? LIMIT 1", id)
+
+	if err == nil {
+		c.JSON(200, task)
+	} else {
+		fmt.Println(err)
+		c.JSON(404, gin.H{"error": "tasks not found"})
+	}
+}
+
+// OLD
 func GetUser(c *gin.Context) {
 	var user []models.User
 	_, err := dbmap.Select(&user, "SELECT * FROM users")
