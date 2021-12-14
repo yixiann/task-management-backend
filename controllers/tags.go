@@ -48,10 +48,11 @@ func CreateTag(c *gin.Context) {
 	}
 }
 
-func DeleteTag(c *gin.Context) {
+func EditTag(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var tag models.Tag
-	_, err := dbmap.Select(&tag, "DELETE FROM tags WHERE id=?", id)
+	_, err := dbmap.Update(&tag, "UPDATE tags SET tag_name=?, colour=? WHERE id=?",
+		tag.TagName, tag.Colour, id)
 	if err == nil {
 		c.JSON(200, "Success")
 	} else {
@@ -59,11 +60,10 @@ func DeleteTag(c *gin.Context) {
 	}
 }
 
-func EditTag(c *gin.Context) {
+func DeleteTag(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var tag models.Tag
-	_, err := dbmap.Update(&tag, "UPDATE tags SET tag_name = ?, colour = ? WHERE id=?",
-		tag.TagName, tag.Colour, id)
+	_, err := dbmap.Select(&tag, "DELETE FROM tags WHERE id=?", id)
 	if err == nil {
 		c.JSON(200, "Success")
 	} else {
