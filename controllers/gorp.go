@@ -2,25 +2,21 @@ package controllers
 
 import (
 	"database/sql"
-	// "fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-gorp/gorp"
 	_ "github.com/go-sql-driver/mysql"
-	// "github.com/heroku/go-getting-started/models"
 )
 
 var dbmap = initDb()
 
 func initDb() *gorp.DbMap {
-	db, err := sql.Open("mysql", "root:Welcome1!@tcp(127.0.0.1:3306)/task_management")
-
+	// db, err := sql.Open("mysql", "root:Welcome1!@tcp(127.0.0.1:3306)/task_management")
+	db, err := sql.Open("mysql", "b15761e98861ec:609f9e90@tcp(us-cdbr-east-05.cleardb.net)/heroku_6f7f9c82f93a9b2")
 	if err != nil {
 		panic(err.Error())
 	}
-
-	// defer db.Close()
 
 	checkErr(err, "sql.Open failed")
 	// dbmap := &gorp.DbMap{Db: db, Dialect: gorp.MySQLDialect{"InnoDB", "UTF8"}}
@@ -31,23 +27,34 @@ func initDb() *gorp.DbMap {
 	return dbmap
 
 	// results, err := db.Query("SELECT * FROM users")
-
-	// insert, err := db.Query("INSERT INTO users VALUES('2','test', 'test','test','test')")
-
 	// if err != nil {
 	// 	panic(err.Error())
 	// }
-
 	// for results.Next() {
 	// 	var user models.User
+	// 	err = results.Scan(&user.Id, &user.Username, &user.Email, &user.TaskId)
+	// 	if err != nil {
+	// 		panic(err.Error())
+	// 	}
+	// 	fmt.Println("WHERE DATA?")
+	// 	fmt.Println(user.Username)
+	// }
 
+	// Do not use this
+	// defer db.Close()
+
+	// results, err := db.Query("SELECT * FROM users")
+	// insert, err := db.Query("INSERT INTO users VALUES('2','test', 'test','test','test')")
+	// if err != nil {
+	// 	panic(err.Error())
+	// }
+	// for results.Next() {
+	// 	var user models.User
 	// 	err = results.Scan(&user.Id, &user.Username, &user.Password, &user.Firstname, &user.Lastname)
 	// 	if err != nil {
 	// 		panic(err.Error())
 	// 	}
-
 	// 	fmt.Println(user.Username)
-
 	// }
 
 	// defer insert.Close()

@@ -11,6 +11,18 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+func GetAllTask(c *gin.Context) {
+	var task []models.Task
+	_, err := dbmap.Select(&task, "SELECT * FROM tasks")
+
+	if err == nil {
+		c.JSON(200, task)
+	} else {
+		fmt.Println(err)
+		c.JSON(404, gin.H{"error": "tasks not found"})
+	}
+}
+
 func GetUser(c *gin.Context) {
 	var user []models.User
 	_, err := dbmap.Select(&user, "SELECT * FROM users")
@@ -36,11 +48,13 @@ func GetUserDetail(c *gin.Context) {
 		user_id, _ := strconv.ParseInt(id, 0, 64)
 
 		content := &models.User{
-			Id:        user_id,
-			Username:  user.Username,
-			Password:  user.Password,
-			Firstname: user.Firstname,
-			Lastname:  user.Lastname,
+			Id:       user_id,
+			Username: user.Username,
+			Email:    user.Email,
+			TaskId:   user.TaskId,
+			// Password:  user.Password,
+			// Firstname: json.Firstname,
+			// Lastname:  json.Lastname,
 		}
 		c.JSON(200, content)
 	} else {
@@ -57,11 +71,13 @@ func Login(c *gin.Context) {
 		user_id := user.Id
 
 		content := &models.User{
-			Id:        user_id,
-			Username:  user.Username,
-			Password:  user.Password,
-			Firstname: user.Firstname,
-			Lastname:  user.Lastname,
+			Id:       user_id,
+			Username: user.Username,
+			Email:    user.Email,
+			TaskId:   user.TaskId,
+			// Password:  user.Password,
+			// Firstname: json.Firstname,
+			// Lastname:  json.Lastname,
 		}
 		c.JSON(200, content)
 	} else {
@@ -76,17 +92,19 @@ func PostUser(c *gin.Context) {
 
 	log.Println(user)
 
-	if user.Username != "" && user.Password != "" && user.Firstname != "" && user.Lastname != "" {
+	if user.Username != "" {
 
-		if insert, _ := dbmap.Exec(`INSERT INTO user (Username, Password, Firstname, Lastname) VALUES (?, ?, ?, ?)`, user.Username, user.Password, user.Firstname, user.Lastname); insert != nil {
+		if insert, _ := dbmap.Exec(`INSERT INTO user (Username, Password, Firstname, Lastname) VALUES (?, ?, ?, ?)`, user.Username, user.Username, user.Username, user.Username); insert != nil {
 			user_id, err := insert.LastInsertId()
 			if err == nil {
 				content := &models.User{
-					Id:        user_id,
-					Username:  user.Username,
-					Password:  user.Password,
-					Firstname: user.Firstname,
-					Lastname:  user.Lastname,
+					Id:       user_id,
+					Username: user.Username,
+					Email:    user.Email,
+					TaskId:   user.TaskId,
+					// Password:  user.Password,
+					// Firstname: json.Firstname,
+					// Lastname:  json.Lastname,
 				}
 				c.JSON(201, content)
 			} else {
@@ -112,14 +130,16 @@ func UpdateUser(c *gin.Context) {
 		user_id, _ := strconv.ParseInt(id, 0, 64)
 
 		user := models.User{
-			Id:        user_id,
-			Username:  user.Username,
-			Password:  user.Password,
-			Firstname: json.Firstname,
-			Lastname:  json.Lastname,
+			Id:       user_id,
+			Username: user.Username,
+			Email:    user.Email,
+			TaskId:   user.TaskId,
+			// Password:  user.Password,
+			// Firstname: json.Firstname,
+			// Lastname:  json.Lastname,
 		}
 
-		if user.Firstname != "" && user.Lastname != "" {
+		if user.Username != "" {
 			_, err = dbmap.Update(&user)
 
 			if err == nil {
