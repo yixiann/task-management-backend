@@ -37,6 +37,6 @@ func CreateUrlMappings() {
 		tag.GET("/fetch", controllers.GetAllTag)
 		tag.POST("/create", controllers.CreateTag)
 		// tag.GET("/edit/:id", controllers.EditTag)
-		// tag.GET("/delete/:id", controllers.DeleteTag)
+		tag.DELETE("/delete/:id", controllers.DeleteTag)
 	}
 }
