@@ -35,7 +35,7 @@ func CreateUrlMappings() {
 	tag := Router.Group("/tag")
 	{
 		tag.GET("/fetch", controllers.GetAllTag)
-		// tag.GET("/create", controllers.CreateTag)
+		tag.POST("/create", controllers.CreateTag)
 		// tag.GET("/edit/:id", controllers.EditTag)
 		// tag.GET("/delete/:id", controllers.DeleteTag)
 	}
