@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/heroku/go-getting-started/models"
 
@@ -25,7 +24,6 @@ func GetAllTag(c *gin.Context) {
 func CreateTag(c *gin.Context) {
 	var tag models.Tag
 	c.Bind(&tag)
-	log.Println(tag)
 	// INSERT INTO `tags` (`id`, `tag_name`, `colour`) VALUES ('3', 'Sleep', 'cyan');
 
 	if tag.TagName != "" || tag.Colour != "" {
@@ -51,13 +49,31 @@ func CreateTag(c *gin.Context) {
 func EditTag(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var tag models.Tag
-	_, err := dbmap.Update(&tag, "UPDATE tags SET tag_name=?, colour=? WHERE id=?",
-		tag.TagName, tag.Colour, id)
-	if err == nil {
-		c.JSON(200, "Success")
+
+	if tag.TagName != "" || tag.Colour != "" {
+		if update, err := dbmap.Update(&tag, "UPDATE tags SET tag_name=?, colour=? WHERE id=?",
+			tag.TagName, tag.Colour, id); update != -1 {
+			if err == nil {
+				content := &models.Tag{
+					TagName: tag.TagName,
+					Colour:  tag.Colour,
+				}
+				c.JSON(201, content)
+			} else {
+				checkErr(err, "Insert failed")
+			}
+		}
 	} else {
-		c.JSON(404, gin.H{"error": "tag not found"})
+		c.JSON(400, gin.H{"error": "Fields are empty"})
 	}
+
+	// update,_ := dbmap.Update(&tag, "UPDATE tags SET tag_name=?, colour=? WHERE id=?",
+	// 	tag.TagName, tag.Colour, id)
+	// if err == nil {
+	// 	c.JSON(200, "Success")
+	// } else {
+	// 	c.JSON(404, gin.H{"error": "tag not found"})
+	// }
 }
 
 func DeleteTag(c *gin.Context) {
