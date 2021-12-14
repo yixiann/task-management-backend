@@ -51,8 +51,10 @@ func EditTag(c *gin.Context) {
 	var tag models.Tag
 	c.Bind(&tag)
 
+	// UPDATE `tags` SET `tag_name` = 'Eating', `colour` = 'red' WHERE `tags`.`id` = 104
+
 	if tag.TagName != "" || tag.Colour != "" {
-		if update, err := dbmap.Update(&tag, "UPDATE tags SET tag_name=?, colour=? WHERE id=?",
+		if update, err := dbmap.Update(&tag, "UPDATE tags SET tag_name=?, colour=? WHERE tags.id=?",
 			tag.TagName, tag.Colour, id); update != -1 {
 			if err == nil {
 				content := &models.Tag{
