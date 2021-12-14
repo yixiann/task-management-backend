@@ -53,11 +53,7 @@ func DeleteTag(c *gin.Context) {
 	var tag models.Tag
 	err := dbmap.SelectOne(&tag, "DELETE FROM tags WHERE id=?", id)
 	if err == nil {
-		if id == "" {
-			c.JSON(400, gin.H{"error": "fields are empty"})
-		} else {
-			c.JSON(200, tag)
-		}
+		c.JSON(200, "Success")
 	} else {
 		c.JSON(404, gin.H{"error": "tag not found"})
 	}
