@@ -36,6 +36,67 @@ func GetOneTask(c *gin.Context) {
 	}
 }
 
+func CreateTask(c *gin.Context) {
+	var task models.Task
+	c.Bind(&task)
+	log.Println(task)
+	// INSERT INTO `tags` (`id`, `tag_name`, `colour`) VALUES ('3', 'Sleep', 'cyan');
+
+	if task.TaskName != "" {
+		if insert, _ := dbmap.Exec(`INSERT INTO tags (
+			user_id,
+			task_name,
+			details,
+			tag_id,
+			deadline,
+			priority,
+			task_status,
+			created_by,
+			assigned_to) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+			task.UserId,
+			task.TaskName,
+			task.Details,
+			task.TagId,
+			task.Deadline,
+			task.Priority,
+			task.TaskStatus,
+			task.CreatedBy,
+			task.AssignedTo); insert != nil {
+			task_id, err := insert.LastInsertId()
+			if err == nil {
+				content := &models.Task{
+					Id:         task_id,
+					UserId:     task.UserId,
+					TaskName:   task.TaskName,
+					Details:    task.Details,
+					TagId:      task.TagId,
+					Deadline:   task.Deadline,
+					Priority:   task.Priority,
+					TaskStatus: task.TaskStatus,
+					CreatedBy:  task.CreatedBy,
+					AssignedTo: task.AssignedTo,
+				}
+				c.JSON(201, content)
+			} else {
+				checkErr(err, "Insert failed")
+			}
+		}
+	} else {
+		c.JSON(400, gin.H{"error": "Fields are empty"})
+	}
+}
+
+func DeleteTask(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var task models.Task
+	_, err := dbmap.Select(&task, "DELETE FROM tasks WHERE id=?", id)
+	if err == nil {
+		c.JSON(200, "Success")
+	} else {
+		c.JSON(404, gin.H{"error": "task not found"})
+	}
+}
+
 // OLD
 func GetUser(c *gin.Context) {
 	var user []models.User

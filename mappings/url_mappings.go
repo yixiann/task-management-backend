@@ -26,10 +26,10 @@ func CreateUrlMappings() {
 	{
 		task.GET("/fetch", controllers.GetAllTask)
 		task.GET("/details/:id", controllers.GetOneTask)
-		// task.POST("/create", controllers.CreateTask)
+		task.POST("/create", controllers.CreateTask)
 		// task.PUT("/update/:id", controllers.UpdateTask)
 		// task.PUT("/edit/:id", controllers.EditTask)
-		// task.DELETE("/delete/:id", controllers.DeleteTask)
+		task.DELETE("/delete/:id", controllers.DeleteTask)
 	}
 
 	tag := Router.Group("/tag")
