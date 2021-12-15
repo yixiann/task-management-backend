@@ -108,6 +108,36 @@ func UpdateTask(c *gin.Context) {
 	}
 }
 
+func EditTask(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var task models.Task
+	c.Bind(&task)
+
+	if task.TaskName != "" {
+		_, err := dbmap.Exec("UPDATE tasks SET user_id=?, task_name=?, details=?, tag_id=?, deadline=?, priority=?, task_status=?, created_by=?, assigned_to=? WHERE id=?",
+			task.UserId,
+			task.TaskName,
+			task.Details,
+			task.TagId,
+			task.Deadline,
+			task.Priority,
+			task.TaskStatus,
+			task.CreatedBy,
+			task.AssignedTo,
+			id)
+		if err == nil {
+			content := &models.Task{
+				Id: task.Id,
+			}
+			c.JSON(201, content)
+		} else {
+			checkErr(err, "Edit failed")
+		}
+	} else {
+		c.JSON(400, gin.H{"error": "Fields are empty"})
+	}
+}
+
 func DeleteTask(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var task models.Task

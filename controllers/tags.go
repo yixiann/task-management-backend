@@ -24,8 +24,6 @@ func GetAllTag(c *gin.Context) {
 func CreateTag(c *gin.Context) {
 	var tag models.Tag
 	c.Bind(&tag)
-	// INSERT INTO `tags` (`id`, `tag_name`, `colour`) VALUES ('3', 'Sleep', 'cyan');
-
 	if tag.TagName != "" || tag.Colour != "" {
 		if insert, _ := dbmap.Exec(`INSERT INTO tags (tag_name, colour) VALUES (?, ?)`,
 			tag.TagName, tag.Colour); insert != nil {
@@ -50,8 +48,6 @@ func EditTag(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var tag models.Tag
 	c.Bind(&tag)
-
-	// UPDATE `tags` SET `tag_name` = 'Eating', `colour` = 'red' WHERE `tags`.`id` = 104
 
 	if tag.TagName != "" || tag.Colour != "" {
 		_, err := dbmap.Exec("UPDATE tags SET tag_name=?, colour=? WHERE id=?",

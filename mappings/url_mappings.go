@@ -28,7 +28,7 @@ func CreateUrlMappings() {
 		task.GET("/details/:id", controllers.GetOneTask)
 		task.POST("/create", controllers.CreateTask)
 		task.PUT("/update/:id", controllers.UpdateTask)
-		// task.PUT("/edit/:id", controllers.EditTask)
+		task.PUT("/edit/:id", controllers.EditTask)
 		task.DELETE("/delete/:id", controllers.DeleteTask)
 	}
 
