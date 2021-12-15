@@ -69,14 +69,6 @@ func EditTag(c *gin.Context) {
 	} else {
 		c.JSON(400, gin.H{"error": "Fields are empty"})
 	}
-
-	// update,_ := dbmap.Update(&tag, "UPDATE tags SET tag_name=?, colour=? WHERE id=?",
-	// 	tag.TagName, tag.Colour, id)
-	// if err == nil {
-	// 	c.JSON(200, "Success")
-	// } else {
-	// 	c.JSON(404, gin.H{"error": "tag not found"})
-	// }
 }
 
 func DeleteTag(c *gin.Context) {
