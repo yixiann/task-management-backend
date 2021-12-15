@@ -54,18 +54,17 @@ func EditTag(c *gin.Context) {
 	// UPDATE `tags` SET `tag_name` = 'Eating', `colour` = 'red' WHERE `tags`.`id` = 104
 
 	if tag.TagName != "" || tag.Colour != "" {
-		if update, err := dbmap.Update(&tag, "UPDATE tags SET tag_name=?, colour=? WHERE tags.id=?",
-			tag.TagName, tag.Colour, id); update != -1 {
-			if err == nil {
-				content := &models.Tag{
-					Id:      tag.Id,
-					TagName: tag.TagName,
-					Colour:  tag.Colour,
-				}
-				c.JSON(201, content)
-			} else {
-				checkErr(err, "Edit failed")
+		_, err := dbmap.Exec("UPDATE tags SET tag_name=?, colour=? WHERE id=?",
+			tag.TagName, tag.Colour, id)
+		if err == nil {
+			content := &models.Tag{
+				Id:      tag.Id,
+				TagName: tag.TagName,
+				Colour:  tag.Colour,
 			}
+			c.JSON(201, content)
+		} else {
+			checkErr(err, "Edit failed")
 		}
 	} else {
 		c.JSON(400, gin.H{"error": "Fields are empty"})

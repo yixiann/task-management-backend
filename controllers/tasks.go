@@ -3,7 +3,8 @@ package controllers
 import (
 	"fmt"
 	"log"
-	"strconv"
+
+	// "strconv"
 
 	"github.com/heroku/go-getting-started/models"
 
@@ -95,137 +96,136 @@ func DeleteTask(c *gin.Context) {
 	}
 }
 
-// OLD
-func GetUser(c *gin.Context) {
-	var user []models.User
-	_, err := dbmap.Select(&user, "SELECT * FROM users")
+// package controllers
 
-	fmt.Println(user)
-	fmt.Println("WHY")
+// import (
+// 	"log"
+// 	"strconv"
 
-	if err == nil {
-		c.JSON(200, user)
-	} else {
-		fmt.Println(err)
-		c.JSON(404, gin.H{"error": "user not found"})
-	}
+// 	"goapi/models"
 
-}
+// 	"github.com/gin-gonic/gin"
+// 	_ "github.com/go-sql-driver/mysql"
+// )
 
-func GetUserDetail(c *gin.Context) {
-	id := c.Params.ByName("id")
-	var user models.User
-	err := dbmap.SelectOne(&user, "SELECT * FROM user WHERE id=? LIMIT 1", id)
+// func GetUser(c *gin.Context) {
+// 	var user []models.User
+// 	_, err := dbmap.Select(&user, "select * from user")
 
-	if err == nil {
-		user_id, _ := strconv.ParseInt(id, 0, 64)
+// 	if err == nil {
+// 		c.JSON(200, user)
+// 	} else {
+// 		c.JSON(404, gin.H{"error": "user not found"})
+// 	}
 
-		content := &models.User{
-			Id:       user_id,
-			Username: user.Username,
-			Email:    user.Email,
-			TaskId:   user.TaskId,
-			// Password:  user.Password,
-			// Firstname: json.Firstname,
-			// Lastname:  json.Lastname,
-		}
-		c.JSON(200, content)
-	} else {
-		c.JSON(404, gin.H{"error": "user not found"})
-	}
-}
+// }
 
-func Login(c *gin.Context) {
-	var user models.User
-	c.Bind(&user)
-	err := dbmap.SelectOne(&user, "select * from user where Username=? LIMIT 1", user.Username)
+// func GetUserDetail(c *gin.Context) {
+// 	id := c.Params.ByName("id")
+// 	var user models.User
+// 	err := dbmap.SelectOne(&user, "SELECT * FROM user WHERE id=? LIMIT 1", id)
 
-	if err == nil {
-		user_id := user.Id
+// 	if err == nil {
+// 		user_id, _ := strconv.ParseInt(id, 0, 64)
 
-		content := &models.User{
-			Id:       user_id,
-			Username: user.Username,
-			Email:    user.Email,
-			TaskId:   user.TaskId,
-			// Password:  user.Password,
-			// Firstname: json.Firstname,
-			// Lastname:  json.Lastname,
-		}
-		c.JSON(200, content)
-	} else {
-		c.JSON(404, gin.H{"error": "user not found"})
-	}
+// 		content := &models.User{
+// 			Id:        user_id,
+// 			Username:  user.Username,
+// 			Password:  user.Password,
+// 			Firstname: user.Firstname,
+// 			Lastname:  user.Lastname,
+// 		}
+// 		c.JSON(200, content)
+// 	} else {
+// 		c.JSON(404, gin.H{"error": "user not found"})
+// 	}
+// }
 
-}
+// func Login(c *gin.Context) {
+// 	var user models.User
+// 	c.Bind(&user)
+// 	err := dbmap.SelectOne(&user, "select * from user where Username=? LIMIT 1", user.Username)
 
-func PostUser(c *gin.Context) {
-	var user models.User
-	c.Bind(&user)
+// 	if err == nil {
+// 		user_id := user.Id
 
-	log.Println(user)
+// 		content := &models.User{
+// 			Id:        user_id,
+// 			Username:  user.Username,
+// 			Password:  user.Password,
+// 			Firstname: user.Firstname,
+// 			Lastname:  user.Lastname,
+// 		}
+// 		c.JSON(200, content)
+// 	} else {
+// 		c.JSON(404, gin.H{"error": "user not found"})
+// 	}
 
-	if user.Username != "" {
+// }
 
-		if insert, _ := dbmap.Exec(`INSERT INTO user (Username, Password, Firstname, Lastname) VALUES (?, ?, ?, ?)`, user.Username, user.Username, user.Username, user.Username); insert != nil {
-			user_id, err := insert.LastInsertId()
-			if err == nil {
-				content := &models.User{
-					Id:       user_id,
-					Username: user.Username,
-					Email:    user.Email,
-					TaskId:   user.TaskId,
-					// Password:  user.Password,
-					// Firstname: json.Firstname,
-					// Lastname:  json.Lastname,
-				}
-				c.JSON(201, content)
-			} else {
-				checkErr(err, "Insert failed")
-			}
-		}
+// func PostUser(c *gin.Context) {
+// 	var user models.User
+// 	c.Bind(&user)
 
-	} else {
-		c.JSON(400, gin.H{"error": "Fields are empty"})
-	}
+// 	log.Println(user)
 
-}
+// 	if user.Username != "" && user.Password != "" && user.Firstname != "" && user.Lastname != "" {
 
-func UpdateUser(c *gin.Context) {
-	id := c.Params.ByName("id")
-	var user models.User
-	err := dbmap.SelectOne(&user, "SELECT * FROM user WHERE id=?", id)
+// 		if insert, _ := dbmap.Exec(`INSERT INTO user (Username, Password, Firstname, Lastname) VALUES (?, ?, ?, ?)`, user.Username, user.Password, user.Firstname, user.Lastname); insert != nil {
+// 			user_id, err := insert.LastInsertId()
+// 			if err == nil {
+// 				content := &models.User{
+// 					Id:        user_id,
+// 					Username:  user.Username,
+// 					Password:  user.Password,
+// 					Firstname: user.Firstname,
+// 					Lastname:  user.Lastname,
+// 				}
+// 				c.JSON(201, content)
+// 			} else {
+// 				checkErr(err, "Insert failed")
+// 			}
+// 		}
 
-	if err == nil {
-		var json models.User
-		c.Bind(&json)
+// 	} else {
+// 		c.JSON(400, gin.H{"error": "Fields are empty"})
+// 	}
 
-		user_id, _ := strconv.ParseInt(id, 0, 64)
+// }
 
-		user := models.User{
-			Id:       user_id,
-			Username: user.Username,
-			Email:    user.Email,
-			TaskId:   user.TaskId,
-			// Password:  user.Password,
-			// Firstname: json.Firstname,
-			// Lastname:  json.Lastname,
-		}
+// func UpdateUser(c *gin.Context) {
+// 	id := c.Params.ByName("id")
+// 	var user models.User
+// 	err := dbmap.SelectOne(&user, "SELECT * FROM user WHERE id=?", id)
 
-		if user.Username != "" {
-			_, err = dbmap.Update(&user)
+// 	if err == nil {
+// 		var json models.User
+// 		c.Bind(&json)
 
-			if err == nil {
-				c.JSON(200, user)
-			} else {
-				checkErr(err, "Updated failed")
-			}
+// 		user_id, _ := strconv.ParseInt(id, 0, 64)
 
-		} else {
-			c.JSON(400, gin.H{"error": "fields are empty"})
-		}
+// 		user := models.User{
+// 			Id:        user_id,
+// 			Username:  user.Username,
+// 			Password:  user.Password,
+// 			Firstname: json.Firstname,
+// 			Lastname:  json.Lastname,
+// 		}
 
-	} else {
-		c.JSON(404, gin.H{"error": "user not found"})
-	}
-}
+// 		if user.Firstname != "" && user.Lastname != "" {
+// 			_, err = dbmap.Update(&user)
+
+// 			if err == nil {
+// 				c.JSON(200, user)
+// 			} else {
+// 				checkErr(err, "Updated failed")
+// 			}
+
+// 		} else {
+// 			c.JSON(400, gin.H{"error": "fields are empty"})
+// 		}
+
+// 	} else {
+// 		c.JSON(404, gin.H{"error": "user not found"})
+// 	}
+// }
