@@ -19,9 +19,6 @@ func initDb() *gorp.DbMap {
 
 	checkErr(err, "sql.Open failed")
 	dbmap := &gorp.DbMap{Db: db}
-	// dbmap := &gorp.DbMap{Db: db, Dialect: gorp.MySQLDialect{"InnoDB", "UTF8"}}
-	// err = dbmap.CreateTablesIfNotExists()
-	// checkErr(err, "Create tables failed")
 
 	return dbmap
 }
@@ -34,7 +31,8 @@ func checkErr(err error, msg string) {
 
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "https://task-management-yixiann.vercel.app")
+		// c.Writer.Header().Set("Access-Control-Allow-Origin", "https://task-management-yixiann.vercel.app")
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
