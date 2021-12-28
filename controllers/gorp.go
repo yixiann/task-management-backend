@@ -28,11 +28,16 @@ func goDotEnvVariable(key string) string {
 
 func initDb() *gorp.DbMap {
 
-	username := goDotEnvVariable("USERNAME")
-	password := goDotEnvVariable("PASSWORD")
-	database := goDotEnvVariable("DATABASE")
+	// username := goDotEnvVariable("USERNAME")
+	// password := goDotEnvVariable("PASSWORD")
+	// database := goDotEnvVariable("DATABASE")
 
-	db, err := sql.Open("mysql", username+":"+password+"@"+database)
+	username := os.Getenv("USERNAME")
+	password := os.Getenv("PASSWORD")
+	database := os.Getenv("DATABASE")
+
+	sqlOpen := username + ":" + password + "@" + database
+	db, err := sql.Open("mysql", sqlOpen)
 	if err != nil {
 		panic(err.Error())
 	}
