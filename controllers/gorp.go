@@ -3,16 +3,36 @@ package controllers
 import (
 	"database/sql"
 	"log"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-gorp/gorp"
 	_ "github.com/go-sql-driver/mysql"
+
+	"github.com/joho/godotenv"
 )
 
 var dbmap = initDb()
 
+func goDotEnvVariable(key string) string {
+
+	// load .env file
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	return os.Getenv(key)
+}
+
 func initDb() *gorp.DbMap {
-	db, err := sql.Open("mysql", "b15761e98861ec:609f9e90@tcp(us-cdbr-east-05.cleardb.net)/heroku_6f7f9c82f93a9b2")
+
+	username := goDotEnvVariable("USERNAME")
+	password := goDotEnvVariable("PASSWORD")
+	database := goDotEnvVariable("DATABASE")
+
+	db, err := sql.Open("mysql", username+":"+password+"@"+database)
 	if err != nil {
 		panic(err.Error())
 	}

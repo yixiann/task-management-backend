@@ -16,6 +16,7 @@ require (
 	github.com/go-playground/validator/v10 v10.9.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.6 // indirect
+	github.com/joho/godotenv v1.4.0
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/lib/pq v1.10.4 // indirect
