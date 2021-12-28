@@ -8,29 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-gorp/gorp"
 	_ "github.com/go-sql-driver/mysql"
-
-	"github.com/joho/godotenv"
 )
 
 var dbmap = initDb()
 
-func goDotEnvVariable(key string) string {
-
-	// load .env file
-	err := godotenv.Load(".env")
-
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-
-	return os.Getenv(key)
-}
-
 func initDb() *gorp.DbMap {
-
-	// username := goDotEnvVariable("USERNAME")
-	// password := goDotEnvVariable("PASSWORD")
-	// database := goDotEnvVariable("DATABASE")
 
 	username := os.Getenv("USERNAME")
 	password := os.Getenv("PASSWORD")
