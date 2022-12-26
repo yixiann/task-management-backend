@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"os"
 
@@ -14,12 +15,16 @@ var dbmap = initDb()
 
 func initDb() *gorp.DbMap {
 
-	username := os.Getenv("USERNAME")
+	host     := os.Getenv("HOST")
+	port     := os.Getenv("PORT")
+	user     := os.Getenv("USER")
 	password := os.Getenv("PASSWORD")
-	database := os.Getenv("DATABASE")
+	dbname   := os.Getenv("DBNAME")
 
-	sqlOpen := username + ":" + password + "@" + database
-	db, err := sql.Open("mysql", sqlOpen)
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+ "password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbname)
+
+	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		panic(err.Error())
 	}
