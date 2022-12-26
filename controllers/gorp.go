@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-gorp/gorp"
@@ -16,13 +17,19 @@ var dbmap = initDb()
 
 func initDb() *gorp.DbMap {
 
+	DEFAULT_PORT := 5432
+
 	host     := os.Getenv("HOST")
-	port     := os.Getenv("PORT")
 	user     := os.Getenv("USER")
 	password := os.Getenv("PASSWORD")
 	dbname   := os.Getenv("DBNAME")
 
-	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+ "password=%s dbname=%s sslmode=enable",
+	port, err	:= strconv.Atoi(os.Getenv("PORT"))
+	if err != nil {
+		port = DEFAULT_PORT
+	}
+
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 
 	db, err := sql.Open("postgres", psqlInfo)
