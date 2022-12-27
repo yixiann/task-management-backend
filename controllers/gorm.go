@@ -1,21 +1,20 @@
 package controllers
 
 import (
-	"database/sql"
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-gorp/gorp"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-var dbmap = initDb()
+var db = initDb()
 
-func initDb() *gorp.DbMap {
+func initDb() *gorm.DB {
 
 	DEFAULT_PORT := 5432
 
@@ -32,26 +31,18 @@ func initDb() *gorp.DbMap {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 
-	db, err := sql.Open("postgres", psqlInfo)
+	db, err := gorm.Open(postgres.Open(psqlInfo), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
 	}
 
-	checkErr(err, "sql.Open failed")
-	dbmap := &gorp.DbMap{Db: db}
-
-	return dbmap
-}
-
-func checkErr(err error, msg string) {
-	if err != nil {
-		log.Fatalln(msg, err)
-	}
+	return db
 }
 
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "https://task-management-yixiann.vercel.app")
+		// c.Writer.Header().Set("Access-Control-Allow-Origin", "https://task-management-yixiann.vercel.app")
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
