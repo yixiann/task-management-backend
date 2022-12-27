@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"fmt"
-	"strconv"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
@@ -15,28 +15,12 @@ var db = initDb()
 
 func initDb() *gorm.DB {
 
-	// host     := os.Getenv("HOST")
-	// user     := os.Getenv("USER")
-	// password := os.Getenv("PASSWORD")
-	// dbname   := os.Getenv("DBNAME")
-	// port 		 := os.Getenv("PORT")
-	// psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-	// 	host, port, user, password, dbname)
-
-	DEFAULT_PORT := 5432
-  
-  host     := "database-yixian.cwmt6ozdpjrl.ap-southeast-1.rds.amazonaws.com"
-  user     := "postgresYiXian"
-  password := "YiXianPostgres"
-  dbname   := "database-yixian"
-
-  port, err := strconv.Atoi("5432")
-  if err != nil {
-    port = DEFAULT_PORT
-  }
-
-  psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-    host, port, user, password, dbname)
+	host     := os.Getenv("HOST")
+	user     := os.Getenv("USER")
+	password := os.Getenv("PASSWORD")
+	dbname   := os.Getenv("DBNAME")
+	psqlInfo := fmt.Sprintf("host=%s port=5432 user=%s password=%s dbname=%s sslmode=disable",
+		host, user, password, dbname)
 
 	db, err := gorm.Open(postgres.Open(psqlInfo), &gorm.Config{})
 	if err != nil {
