@@ -3,7 +3,6 @@ package controllers
 import (
 	"fmt"
 	"os"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
@@ -16,20 +15,12 @@ var db = initDb()
 
 func initDb() *gorm.DB {
 
-	DEFAULT_PORT := 5432
-
 	host     := os.Getenv("HOST")
 	user     := os.Getenv("USER")
 	password := os.Getenv("PASSWORD")
 	dbname   := os.Getenv("DBNAME")
-
-	port, err	:= strconv.Atoi(os.Getenv("MYPORT"))
-	if err != nil {
-		port = DEFAULT_PORT
-	}
-
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
+	psqlInfo := fmt.Sprintf("host=%s port=5432 user=%s password=%s dbname=%s sslmode=disable",
+		host, user, password, dbname)
 
 	db, err := gorm.Open(postgres.Open(psqlInfo), &gorm.Config{})
 	if err != nil {
