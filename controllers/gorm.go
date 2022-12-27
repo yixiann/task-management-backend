@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -17,25 +18,15 @@ func initDb() *gorm.DB {
 
 	DEFAULT_PORT := 5432
 
-	// host     := os.Getenv("HOST")
-	// user     := os.Getenv("USER")
-	// password := os.Getenv("PASSWORD")
-	// dbname   := os.Getenv("DBNAME")
+	host     := os.Getenv("HOST")
+	user     := os.Getenv("USER")
+	password := os.Getenv("PASSWORD")
+	dbname   := os.Getenv("DBNAME")
 
-	// port, err	:= strconv.Atoi(os.Getenv("PORT"))
-	// if err != nil {
-	// 	port = DEFAULT_PORT
-	// }
-
-	host     := "database-yixian.cwmt6ozdpjrl.ap-southeast-1.rds.amazonaws.com"
-  user     := "postgresYiXian"
-  password := "YiXianPostgres"
-  dbname   := "database-yixian"
-
-  port, err := strconv.Atoi("5432")
-  if err != nil {
-    port = DEFAULT_PORT
-  }
+	port, err	:= strconv.Atoi(os.Getenv("PORT"))
+	if err != nil {
+		port = DEFAULT_PORT
+	}
 
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
@@ -50,8 +41,7 @@ func initDb() *gorm.DB {
 
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// c.Writer.Header().Set("Access-Control-Allow-Origin", "https://task-management-yixiann.vercel.app/")
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "https://task-management-yixiann.vercel.app/")
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
