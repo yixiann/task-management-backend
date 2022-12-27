@@ -23,7 +23,7 @@ func initDb() *gorm.DB {
 	password := os.Getenv("PASSWORD")
 	dbname   := os.Getenv("DBNAME")
 
-	port, err	:= strconv.Atoi(os.Getenv("PORT"))
+	port, err	:= strconv.Atoi(os.Getenv("MYPORT"))
 	if err != nil {
 		port = DEFAULT_PORT
 	}
