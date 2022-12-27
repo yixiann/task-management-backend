@@ -13,15 +13,6 @@ func CreateUrlMappings() {
 
 	Router.Use(controllers.Cors())
 
-	// user := Router.Group("/user")
-	// {
-	// 	user.GET("/users/:id", controllers.GetUserDetail)
-	// 	user.GET("/users/", controllers.GetUser)
-	// 	user.POST("/login/", controllers.Login)
-	// 	user.PUT("/users/:id", controllers.UpdateUser)
-	// 	user.POST("/users", controllers.PostUser)
-	// }
-
 	task := Router.Group("/task")
 	{
 		task.GET("/fetch", controllers.GetAllTask)

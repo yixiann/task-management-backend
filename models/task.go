@@ -2,7 +2,6 @@ package models
 
 type Task struct {
 	Id         int64  `db:"id" json:"id"`
-	UserId     int    `db:"user_id" json:"userId"`
 	TaskName   string `db:"task_name" json:"taskName"`
 	Details    string `db:"details" json:"details"`
 	TagId      string `db:"tag_id" json:"tagId"`

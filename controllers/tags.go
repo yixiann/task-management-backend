@@ -11,69 +11,58 @@ import (
 
 func GetAllTag(c *gin.Context) {
 	var tag []models.Tag
-	_, err := dbmap.Select(&tag, "SELECT * FROM tags")
+	
+	result := db.Find(&tag)
 
-	if err == nil {
+	if result.Error == nil {
 		c.JSON(200, tag)
 	} else {
-		fmt.Println(err)
-		c.JSON(404, gin.H{"error": "tags not found"})
+		fmt.Println(result.Error)
+		c.JSON(404, gin.H{"error": "failed to get all tags"})
 	}
 }
 
 func CreateTag(c *gin.Context) {
 	var tag models.Tag
 	c.Bind(&tag)
-	if tag.TagName != "" || tag.Colour != "" {
-		if insert, _ := dbmap.Exec(`INSERT INTO tags (tag_name, colour) VALUES (?, ?)`,
-			tag.TagName, tag.Colour); insert != nil {
-			tag_id, err := insert.LastInsertId()
-			if err == nil {
-				content := &models.Tag{
-					Id:      tag_id,
-					TagName: tag.TagName,
-					Colour:  tag.Colour,
-				}
-				c.JSON(201, content)
-			} else {
-				checkErr(err, "Insert failed")
-			}
-		}
+
+	result := db.Create(&tag) 
+	
+	if result.Error == nil {
+		c.JSON(201, tag);
 	} else {
-		c.JSON(400, gin.H{"error": "Fields are empty"})
+		fmt.Println(result.Error)
+		c.JSON(404, gin.H{"error": "failed to create tag"})
 	}
 }
 
 func EditTag(c *gin.Context) {
-	id := c.Params.ByName("id")
 	var tag models.Tag
 	c.Bind(&tag)
-
-	if tag.TagName != "" || tag.Colour != "" {
-		_, err := dbmap.Exec("UPDATE tags SET tag_name=?, colour=? WHERE id=?",
-			tag.TagName, tag.Colour, id)
-		if err == nil {
-			content := &models.Tag{
-				Id:      tag.Id,
-				TagName: tag.TagName,
-				Colour:  tag.Colour,
-			}
-			c.JSON(201, content)
-		} else {
-			checkErr(err, "Edit failed")
-		}
+	
+	id := c.Params.ByName("id")
+	db.Model(&models.Tag{}).Where("id = ?", id).Updates(
+		models.Tag{TagName: tag.TagName, Colour: tag.Colour})
+	
+	result := db.Save(&tag)
+	
+	if result.Error == nil {
+		c.JSON(200, tag)
 	} else {
-		c.JSON(400, gin.H{"error": "Fields are empty"})
+		fmt.Println(result.Error)
+		c.JSON(404, gin.H{"error": "failed to edit tag"})
 	}
 }
 
 func DeleteTag(c *gin.Context) {
-	id := c.Params.ByName("id")
 	var tag models.Tag
-	_, err := dbmap.Select(&tag, "DELETE FROM tags WHERE id=?", id)
-	if err == nil {
-		c.JSON(200, "Success")
+
+	id := c.Params.ByName("id")
+	result := db.Delete(&tag, id)
+
+	if result.Error == nil {
+		c.JSON(200, tag)
 	} else {
-		c.JSON(404, gin.H{"error": "tag not found"})
+		c.JSON(404, gin.H{"error": "failed to delete tag"})
 	}
 }
