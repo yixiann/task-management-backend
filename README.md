@@ -40,6 +40,16 @@ go run main.go
 
 ```
 
+## Deployment
+
+```sh
+GOOS=linux GOARCH=arm64 go build -o bootstrap main.go
+chmod +x bootstrap
+zip function.zip bootstrap
+```
+
+Upload zipped file to AWS Lambda
+
 ## Created By
 
 Tan Yi Xian
