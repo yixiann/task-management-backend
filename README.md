@@ -35,6 +35,8 @@ export HOST=localhost
 export USER=your_db_user
 export PASSWORD=your_db_password
 export DBNAME=your_db_name
+export ENDPOINT=your_db_endpoint
+export PORT=8080
 
 go run main.go
 

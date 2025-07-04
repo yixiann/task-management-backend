@@ -19,9 +19,11 @@ func initDb() *gorm.DB {
 	user     := os.Getenv("USER")
 	password := os.Getenv("PASSWORD")
 	dbname   := os.Getenv("DBNAME")
-	psqlInfo := fmt.Sprintf("host=%s port=5432 user=%s password=%s dbname=%s sslmode=require",
-		host, user, password, dbname)
-
+	endpoint := os.Getenv("ENDPOINT")
+	psqlInfo := fmt.Sprintf(
+		"postgres://%s:%s@%s:5432/%s?sslmode=require&options=endpoint%%3D%s",
+		user, password, host, dbname, endpoint,
+	)
 	db, err := gorm.Open(postgres.Open(psqlInfo), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
