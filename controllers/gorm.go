@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -14,23 +13,19 @@ import (
 var db = initDb()
 
 func initDb() *gorm.DB {
+	dsn := os.Getenv("DATABASE_URL")
+	if dsn == "" {
+		panic("DATABASE_URL not set")
+	}
 
-	host     := os.Getenv("HOST")
-	user     := os.Getenv("USER")
-	password := os.Getenv("PASSWORD")
-	dbname   := os.Getenv("DBNAME")
-	endpoint := os.Getenv("ENDPOINT")
-	psqlInfo := fmt.Sprintf(
-		"postgres://%s:%s@%s:5432/%s?sslmode=require&options=endpoint%%3D%s",
-		user, password, host, dbname, endpoint,
-	)
-	db, err := gorm.Open(postgres.Open(psqlInfo), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
 	}
 
 	return db
 }
+
 
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {

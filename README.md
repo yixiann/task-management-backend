@@ -31,11 +31,7 @@ git clone https://github.com/yixiann/task-management-backend
 cd task-management-backend
 go build -o bin/task-management-backend -v .
 
-export HOST=localhost
-export USER=your_db_user
-export PASSWORD=your_db_password
-export DBNAME=your_db_name
-export ENDPOINT=your_db_endpoint
+export DATABASE_URL="postgres://<DB_USER>:<DB_PASSWORD>@<DB_HOST>/<DB_NAME>?sslmode=require"
 export PORT=8080
 
 go run main.go
